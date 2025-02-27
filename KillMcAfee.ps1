@@ -32,4 +32,22 @@ if (Test-Path $startMenuPath) { Remove-Item -Path $startMenuPath -Recurse -Force
 if (-Not (Test-Path $finalLogDir)) { New-Item -ItemType Directory -Path $finalLogDir -Force }
 if (Test-Path $logFile) { Move-Item -Path $logFile -Destination $finalLogFile -Force }
 
-if (Test-Path $finalLogFile) { Exit 0 } else { Exit 1 }
+# **New Section: Remove McAfee Appx Packages**
+Write-Output "Checking for McAfee Appx packages..."
+Get-AppxPackage -AllUsers | Where-Object { $_.Name -like "*McAfee*" } | ForEach-Object { 
+    try {
+        Remove-AppxPackage -Package $_.PackageFullName -AllUsers -ErrorAction Stop
+        Write-Output "Successfully removed: $($_.PackageFullName)"
+    } catch {
+        Write-Output "Failed to remove: $($_.PackageFullName) - Error: $_"
+    }
+}
+
+# **Final Exit Check**
+if (Test-Path $finalLogFile) { 
+    Write-Output "McAfee removal completed successfully."
+    Exit 0 
+} else { 
+    Write-Output "McAfee removal failed."
+    Exit 1 
+}
