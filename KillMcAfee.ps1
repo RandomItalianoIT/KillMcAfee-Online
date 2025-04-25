@@ -1,6 +1,6 @@
 $zipFile = "C:\Temp\McAfeeUninstall.zip"
 $tempPath = "C:\Temp\McAfeeUninstall"
-$destination = "C:\Temp"
+$destination = "C:\Temp\McAfeeUninstall.zip"
 $mcprPath = "$tempPath\mccleanup.exe"
 $logFile = "$tempPath\mccleanup.txt"
 $finalLogDir = "C:\ProgramData\WeKilledtheMcAfeeVirus"
@@ -8,8 +8,10 @@ $finalLogFile = "$finalLogDir\mccleanup.txt"
 $mcAfeeRegKey = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\McAfee.wps"
 $mcAfeeMainKey = "HKLM:\SOFTWARE\McAfee"
 $startMenuPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\McAfee"
-$URL = 'https://github.com/RandomItalianoIT/KillMcAfee-Online/blob/9c0c00aae3e533bba53f20447761b38ca527d371/McAfeeUninstall.zip'
+$URL = 'https://github.com/RandomItalianoIT/KillMcAfee-Online/raw/refs/heads/main/McAfeeUninstall.zip'
 
+Mkdir C:\Temp
+Write-Output "Downloading McAfee Removal Tool"
 Invoke-WebRequest -Uri $URL -OutFile $destination -Method Get
 
 if (-Not (Test-Path $zipFile)) { Exit 1 }
@@ -26,6 +28,7 @@ try {
 
 if (-Not (Test-Path $mcprPath)) { Exit 1 }
 
+Write-Output "Attempting to uninstall McAfee"
 $programArg = "-p StopServices,MFSY,PEF,MXD,CSP,Sustainability,MOCP,MFP,APPSTATS,Auth,EMproxy,FWdiver,HW,MAS,MAT,MBK,MCPR,McProxy,McSvcHost,VUL,MHN,MNA,MOBK,MPFP,MPFPCU,MPS,SHRED,MPSCU,MQC,MQCCU,MSAD,MSHR,MSK,MSKCU,MWL,NMC,RedirSvc,VS,REMEDIATION,MSC,YAP,TRUEKEY,LAM,PCB,Symlink,SafeConnect,MGS,WMIRemover,RESIDUE -v -s"
 Start-Process -FilePath $mcprPath -ArgumentList $programArg -Wait -NoNewWindow
 
