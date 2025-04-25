@@ -1,5 +1,6 @@
-$zipFile = ".\McAfeeUninstall.zip"
+$zipFile = "C:\Temp\McAfeeUninstall.zip"
 $tempPath = "C:\Temp\McAfeeUninstall"
+$destination = "C:\Temp"
 $mcprPath = "$tempPath\mccleanup.exe"
 $logFile = "$tempPath\mccleanup.txt"
 $finalLogDir = "C:\ProgramData\WeKilledtheMcAfeeVirus"
@@ -7,6 +8,9 @@ $finalLogFile = "$finalLogDir\mccleanup.txt"
 $mcAfeeRegKey = "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\McAfee.wps"
 $mcAfeeMainKey = "HKLM:\SOFTWARE\McAfee"
 $startMenuPath = "C:\ProgramData\Microsoft\Windows\Start Menu\Programs\McAfee"
+$URL = 'https://github.com/RandomItalianoIT/KillMcAfee-Online/blob/9c0c00aae3e533bba53f20447761b38ca527d371/McAfeeUninstall.zip'
+
+Invoke-WebRequest -Uri $URL -OutFile $destination -Method Get
 
 if (-Not (Test-Path $zipFile)) { Exit 1 }
 if (-Not (Test-Path "C:\Temp")) { New-Item -ItemType Directory -Path "C:\Temp" -Force }
